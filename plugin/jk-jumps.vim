@@ -8,11 +8,19 @@ if !exists('g:jk_jumps_minimum_lines')
 endif
 
 function! JkJumps(key) range
-    exec "normal! ".v:count1.a:key
+    let akey = a:key
+    if v:count > 0 
+        if a:key == 'gk'
+            let akey = 'k'
+        elseif a:key == 'gj'
+            let akey = 'j'
+        end
+    end
+    exec "normal! ".v:count1.akey
     if v:count1 >= g:jk_jumps_minimum_lines
         let target = line('.')
         let bkey = 'k'
-        if (a:key == 'k')
+        if akey == 'k'
             let bkey = 'j'
         endif
         exec "normal! ".v:count1.bkey
@@ -20,5 +28,5 @@ function! JkJumps(key) range
     endif
 endfunction
 
-nnoremap <silent> j :<C-U>call JkJumps('j')<CR>
-nnoremap <silent> k :<C-U>call JkJumps('k')<CR>
+nnoremap <silent> j :<C-U>call JkJumps('gj')<CR>
+nnoremap <silent> k :<C-U>call JkJumps('gk')<CR>
